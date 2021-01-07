@@ -14,28 +14,25 @@ class ListController extends Controller{
 
     //后台首页
     public function index($id =  0){
-
-
         $list = article::on('mysql');
         $list = $list->with('content');
         $list = $list->with('img');
         $list = $list->orderBy('id');
         $list = $list->where('life_id',0);
-//        if($id == 0){
-//            $list = $list->where('type_id','=',$id);
-//        }
-        $count  = $list->get()->count();
+        if($id){
+            $list = $list->where('type_id','=',$id);
+        }
 
+
+//        $count  = $list->get()->count();
         $list   = $list->paginate(10);
 
-//        dd($list);exit;
-//
 
+//        dd($list);exit;
 //        foreach($article as $k => $data){
 //            $reply_cont =   \DB::table('article_reply')->where('article_id','=',$data->id)->count();
 //            $article[$k]->article_reply = $reply_cont;
 //        }
-
         return view("home.list.index")->with('article',$list);
     }
 
@@ -43,13 +40,15 @@ class ListController extends Controller{
 
     //博文页面展示
     public function info($id){
-        $article = \DB::table('article')
-            ->leftjoin('article_content','article.id','=','article_content.article_id')
-            ->where('article.id','=',$id)
-            ->first();
 
-        return view("home.list.info")->with('article',$article);
+        $list = article::on('mysql');
+        $list = $list->with('content');
+        $list = $list->where('id',$id);
+        $list = $list->first();
 
+//        dd($list);
+
+        return view("home.list.info")->with('article',$list);
     }
 
 

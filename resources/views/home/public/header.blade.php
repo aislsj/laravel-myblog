@@ -25,7 +25,7 @@
             <h1 class="logo"><a href="http://www.yangqq.com">樱花灿烂时</a></h1>
             <li><a href="/">网站首页</a> </li>
             <li><a href="/about">关于我</a> </li>
-            <li><a href="list">学无止境</a>
+            <li><a href="/list">学无止境</a>
                 <ul class="sub-nav">
                     @foreach($list as $value)
                     <li><a href="/list/{{$value->id}}">{{$value->catename}}</a></li>
