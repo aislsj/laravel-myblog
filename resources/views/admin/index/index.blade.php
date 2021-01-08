@@ -57,22 +57,20 @@
                     <a href="#"><i class="fa fa-magic"></i> <span class="nav-label">文章分类</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/type">学无止境</a></li>
-                        <li><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/life">慢生活</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#"><i class="fa fa-edit"></i><span class="nav-label">闲言碎语</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/user">每日一话</a></li>
-                        <li><a href="mailbox.html"><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/user/message" style="display: inline">留言列表</a><span class="label label-warning pull-right">16</span></a></li>
-                    </ul>
-                </li>
+                {{--<li>--}}
+                    {{--<a href="#"><i class="fa fa-edit"></i><span class="nav-label">闲言碎语</span><span class="fa arrow"></span></a>--}}
+                    {{--<ul class="nav nav-second-level">--}}
+                        {{--<li><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/user">每日一话</a></li>--}}
+                        {{--<li><a href="mailbox.html"><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/user/message" style="display: inline">留言列表</a><span class="label label-warning pull-right">16</span></a></li>--}}
+                    {{--</ul>--}}
+                {{--</li>--}}
                 <li>
                     <a href="#"><i class="fa fa-flask"></i> <span class="nav-label">管理员管理</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/admin">管理员列表</a></li>
-                        <li><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/admin">用户组列表</a></li>
-                        <li><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/admin">权限列表</a></li>
+
                     </ul>
                 </li>
                 <li>
@@ -91,10 +89,7 @@
                     </ul>
                 </li>
 
-                <li>
-                    <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">未定义</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level"></ul>
-                </li>
+
             </ul>
         </div>
     </nav>

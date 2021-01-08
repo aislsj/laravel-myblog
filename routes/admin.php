@@ -6,11 +6,22 @@
  * Time: 10:11
  */
 
+//登录、注销 修改密码
+Route::group([], function () {
+    Route::get('login', 'LoginController@showLoginForm');
+    Route::post('login', 'LoginController@login');
+    Route::get('logout', 'LoginController@logout');
+    Route::get('icons', 'IndexController@icon');
+    Route::post('update-password', 'IndexController@updatePassword');
+});
 
 
 
 //后台
-Route::group(['namespace'=>'Admin'],function(){//,'middleware'=>'adminLogin'
+Route::group(['middleware' => ['auth:admin']],function(){//,
+
+
+
     //图片上传
     Route::post('/upload','UploadController@upload');
     //后台首页
@@ -36,9 +47,9 @@ Route::group(['namespace'=>'Admin'],function(){//,'middleware'=>'adminLogin'
     });
     //管理员管理
     Route::group([], function () {
-        Route::resource('/admin','AdminController');
-        //管理员状态修改
-        Route::post('/admin/ajaxStatus','AdminController@ajaxStatus');
+        Route::resource('/admin','AdminController');//管理员列表
+        Route::post('/admin/ajaxStatus','AdminController@ajaxStatus');//管理员启用停用
+
     });
     //系统设置
     Route::group([], function () {

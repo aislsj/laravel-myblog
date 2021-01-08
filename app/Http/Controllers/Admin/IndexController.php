@@ -19,8 +19,4 @@ class IndexController extends Controller{
         return view("admin.index.homepage");
     }
 
-//    public function tiaozhuan(){
-//        return redirect("admin");
-//    }
-
 }
