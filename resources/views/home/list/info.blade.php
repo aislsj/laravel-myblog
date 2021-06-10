@@ -1,4 +1,5 @@
-
+index.blade.php
+info.blade.php
 @include('home/public/header')
 
 <article>

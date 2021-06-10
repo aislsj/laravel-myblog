@@ -1,22 +1,30 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lenovo
- * Date: 2018/2/5
- * Time: 19:13
- */
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Common;
+use App\Jobs\ProcessPodcast;
+use Illuminate\Support\Facades\Auth;
 
-class IndexController extends Controller{
-    //后台首页
+class IndexController extends Controller
+{
+    /**
+     * 显示后台管理模板首页
+     */
     public function index(){
-        return view("admin.index.index");
+
+        return view('admin.index.index');
     }
+
     public function homepage(){
         return view("admin.index.homepage");
+    }
+
+
+    //测试添加数据
+    public function ceshi(){
+
+        ProcessPodcast::dispatch(1);
     }
 
 }

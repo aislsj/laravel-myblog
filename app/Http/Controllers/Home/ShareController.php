@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 class ShareController extends Controller{
 
 
-    //后台首页
+
     public function index(){
         return view("home.share.index");
     }

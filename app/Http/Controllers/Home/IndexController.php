@@ -1,37 +1,32 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lenovo
- * Date: 2018/2/5
- * Time: 19:13
- */
 namespace App\Http\Controllers\Home;
 
+
 use App\Http\Controllers\Controller;
+use App\Services\ArticleService;
+use App\Services\BannerService;
+use App\Services\RmendService;
+use Illuminate\Http\Request;
 
-class IndexController extends CommonController{
+class IndexController extends Controller {
 
+    public $request;
 
-    //首页
-    public function index(){
-
-        $article = \DB::table('article')
-            ->join('article_content','article.id','=','article_content.article_id')
-            ->leftjoin('article_img','article.id','=','article_img.article_id')
-            ->orderby('id','desc')
-            ->paginate(10);
-
-
-        foreach($article as $k => $data){
-            $reply_cont =   \DB::table('article_reply')->where('article_id','=',$data->id)->count();
-            $article[$k]->article_reply = $reply_cont;
-        }
-
-        $banner = \DB::table('banner')->get();
-        $rmend  = \DB::table('rmend')->get();
-
-
-
-        return view("home.index.index")->with('article',$article)->with('banner',$banner)->with('rmend',$rmend);
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
     }
+    public function index(){
+        //获取文章
+        $articles = ArticleService::getArticleList(10);
+        //获取轮播图
+        $banneer = BannerService::getBannerList();
+        $data['banner'] =$banneer['data'];
+        //获取推荐文章
+        $RmendArticle = RmendService::getRmendList(2);
+
+
+        return view("home.index.index")->with('RmendArticle',$RmendArticle)->with('data',$data)->with('articles',$articles);
+    }
+
 }

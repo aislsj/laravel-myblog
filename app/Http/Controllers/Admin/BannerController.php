@@ -3,143 +3,73 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\ArticleService;
+use App\Services\BannerService;
 use Illuminate\Http\Request;
 
 
 //轮播图
-class BannerController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *显示列表
-     * @return \Illuminate\Http\Response
-     */
-    public function index(){
-        $tot=\DB::table('banner')->count();
+class BannerController extends Controller{
 
-        $datas = \DB::table('banner')
-            ->leftjoin('article','banner.articlelink','=','article.id')
-            ->select('banner.*','article.article_name')
-            ->get();
+    public $request;
+    public $bannerService;
 
-
-        return view("admin.banner.index")->with('data',$datas)->with('tot',$tot);
+    public function __construct(Request $request,BannerService $banner)
+    {
+        $this->request = $request;
+        $this->bannerService = $banner;
     }
-    /**
-     * Show the form for creating a new resource.
-     *创建资源
-     * @return \Illuminate\Http\Response
-     */
+
+
+    public function index(){
+        $data = $this->bannerService->getBannerList();
+        return view("admin.banner.index")->with('data',$data['data']);
+
+
+    }
+
     public function create()
     {
-        $articles = \DB::table('article')->get();
-
-        return view("admin.banner.create")->with('articles',$articles);
+        return view("admin.banner.create");
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *数据保存
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request){
-        unset($request['_token']);
-        $arr = $request->except("meinv",'file');
 
-
-        //表单验证规则
-        $rules=[
-            'banner_img'=>'required',//存在//轮播图图片
-            'banner_sort'=>'required',//存在//排序
-        ];
-        //表单提示信息
-        $messages=[
-            'banner_img.required'=>'banner图片不能为空',
-            'banner_sort.required'=>'请输入排序号',
-        ];
-        $validator = \Validator::make($arr,$rules,$messages);//数据 验证规则 提示信息
-        if($validator->passes()){
-
-            if(\DB::table('banner')->insert($arr)){
-                return redirect('/admin/banner');
-            }else{
-                return back();
-            }
+    public function store(){
+        $data   = $this->request->all();
+        $req_result = $this->bannerService->createBanner($data);
+        if($req_result['success']){
+            return redirect('/admin/banner');
         }else{
-            return back()->withErrors($validator);
+            return back()->withErrors([$req_result['msg']])->withInput();
+        }
+    }
+
+    public function edit($id){
+        $req_result = $this->bannerService->getBanner($id);
+        return view("admin.banner.edit")->with('data',$req_result['data']);
+    }
+
+    public function update()
+    {
+        $data   = $this->request->all();
+        $req_result = $this->bannerService->updateBanner($data);
+        if($req_result['success']){
+            return redirect('/admin/banner');
+        }else{
+            return back()->withErrors([$req_result['msg']])->withInput();
         }
 
     }
-    /**
-     * Show the form for editing the specified resource.
-     *根据id显示表单编辑
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $data = \DB::table('banner')->find($id);
-        $articles = \DB::table('article')->get();
 
-
-        //http://www.5idev.com/p-php_substr_strstr.shtml 字符串截取
-
-
-
-
-
-        return view("admin.banner.edit")->with("data",$data)->with('articles',$articles);
-    }
-    /**
-     * Update the specified resource in storage.
-     *edit提交到这里来修改
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-
-        $arr = $request->except('_token','_method','file');
-
-
-
-
-        //表单验证规则
-        $rules=[
-            'banner_img'=>'required',//存在//轮播图图片
-            'banner_sort'=>'required',//存在//排序
-        ];
-        //表单提示信息
-        $messages=[
-            'banner_img.required'=>'轮播图图片不能为空',
-            'banner_sort.required'=>'请输入排序号',
-        ];
-        $validator = \Validator::make($arr,$rules,$messages);//数据 验证规则 提示信息
-        if($validator->passes()){
-            if(\DB::table('banner')->where('id',$arr['id'])->update($arr)){
-                return redirect('admin/banner');
-            }else{
-                return back();
-            }
-        }else{
-            return back()->withErrors($validator);
-        }
-
-    }
-    /**
-     * Remove the specified resource from storage.
-     *对应delete
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id){
-        //删除数据
-        if(\DB::table("banner")->delete($id)){
-            return 1;
-        }else{
-            return 0;
+        $req_result = $this->bannerService->deleteBanner($id);
+        if ($req_result['success'] == true) {
+            $result['code'] = 1000;
+            $result['msg']  = '操作成功';
+        } else {
+            $result['code'] = 2000;
+            $result['msg']  = isset($req_result['msg']) ? $req_result['msg'] : '操作失败';
         }
+        return $result;
     }
 }

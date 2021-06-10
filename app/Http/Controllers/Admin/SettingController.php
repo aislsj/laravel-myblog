@@ -8,25 +8,38 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+
+use App\Services\ConfigService;
 use Illuminate\Http\Request;
 
 class SettingController extends Controller{
-    //后台首页
+
+    public $request;
+    public $ConfigService;
+
+    public function __construct(Request $request,ConfigService $ConfigService){
+        $this->request = $request;
+        $this->ConfigService = $ConfigService;
+    }
+
     public function index(){
-        $config = \DB::table('config')->get();
-        return view("admin.sys.config.index")->with('config',$config);
+
+        $data = ConfigService::getConfig();
+
+        return view("admin.config.index")->with('data',$data);
     }
 
 
-    public function  update_config(Request $request){
+    public function  update_config(){
+        $data   = $this->request->all();
+        $req_result = ConfigService::updateConfig($data);
 
-//      DB::table('users')->where('description', 1)->update(array('votes' => 1));
-        $config = $request->all();
-        unset($config['_token']);
-        foreach($config as $k=>$v){
-            \DB::table('config')->where('enname','=', $k)->update(array('values'=> $v));
+        if($req_result['success']){
+            return redirect('/admin/config');
+        }else{
+            return back()->withErrors([$req_result['msg']])->withInput();
         }
-       return  redirect()->action('Admin\SettingController@index');
+
     }
 
 }

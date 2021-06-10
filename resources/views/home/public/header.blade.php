@@ -13,9 +13,7 @@
     <script src="{{ URL::asset('/Style/home/js/jquery.easyfader.min.js') }}"></script>
     <script src="{{ URL::asset('/Style/home/js/scrollReveal.js') }}"></script>
     <script src="{{ URL::asset('/Style/home/js/common.js') }}"></script>
-    <!--[if lt IE 9]>
     <script src="/Style/home/js/modernizr.js"></script>
-    <![endif]-->
 </head>
 <body>
 <header>
@@ -25,14 +23,19 @@
             <h1 class="logo"><a href="http://www.yangqq.com">樱花灿烂时</a></h1>
             <li><a href="/">网站首页</a> </li>
             <li><a href="/about">关于我</a> </li>
-            <li><a href="/list">学无止境</a>
-                <ul class="sub-nav">
-                    @foreach($list as $value)
-                    <li><a href="/list/{{$value->id}}">{{$value->catename}}</a></li>
-                    @endforeach
-                </ul>
-            </li>
-            <li><a href="/life">慢生活</a></li>
+            @foreach($list as $value)
+                <li><a href="javascript:void(0)">{{$value['name']}}</a>
+                    @if(isset($value['son']))
+                        <ul class="sub-nav">
+                            @foreach($value['son'] as $data)
+                                <li><a href="/category/{{$data['id']}}">{{$data['name']}}</a></li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </li>
+            @endforeach
+
+
             <li><a href="/time">时间轴</a> </li>
             <div id="search_bar" class="search_bar">
                 <form  id="searchform" action="[!--news.url--]e/search/index.php" method="post" name="searchform">
@@ -47,21 +50,26 @@
         </nav>
     </div>
     <!--PC端结束-->
+
+
     <!--Phone端开始-->
     <div id="mnav">
-        <h2><a href="http://www.yangqq.com" class="mlogo">樱花灿烂时</a><span class="navicon"></span></h2>
+        <h2><a href="/" class="mlogo">樱花灿烂时</a><span class="navicon"></span></h2>
         <dl class="list_dl">
             <dt class="list_dt"> <a href="/">网站首页</a> </dt>
             <dt class="list_dt"> <a href="/about">关于我</a> </dt>
             <dt class="list_dt"> <a href="list">学无止境</a> </dt>
-            <dd class="list_dd">
-                <ul>
-                    @foreach($list as $value)
-                        <li><a href="/list/{{$value->id}}">{{$value->catename}}</a></li>
-                    @endforeach
-                </ul>
-            </dd>
-            <dt class="list_dt"> <a href="/life">慢生活</a> </dt>
+            @foreach($list as $value)
+                <li><a href="javascript:void(0)">{{$value['name']}}</a>
+                    @if(isset($value['son']))
+                        <ul class="sub-nav">
+                            @foreach($value['son'] as $data)
+                                <li><a href="/catrgory/{{$data['id']}}">{{$data['name']}}</a></li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </li>
+            @endforeach
             <li><a href="/time">时间轴</a> </li>
         </dl>
     </div>

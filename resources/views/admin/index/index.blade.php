@@ -28,7 +28,7 @@
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-                        <span><img alt="image" class="img-circle" src="/Style/admin/img/profile_small.jpg"  width="100px;"/></span>
+{{--                        <span><img alt="image" class="img-circle" src="/Style/admin/img/profile_small.jpg"  width="100px;"/></span>--}}
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear">
                                <span class="block m-t-xs"><strong class="font-bold">Beaut-zihan</strong></span><span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
@@ -45,7 +45,7 @@
                     <div class="logo-element">H+</div>
                 </li>
                 <li>
-                    <a class="J_menuItem"  href="/admin/homepage" data-index="0"><i class="fa fa-home"></i><span class="nav-label">我的主页</span></a>
+                    <a class="J_menuItem"  href="admin/homepage" data-index="0"><i class="fa fa-home"></i><span class="nav-label">我的主页</span></a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-table"></i> <span class="nav-label">我的博客</span><span class="fa arrow"></span></a>
@@ -56,7 +56,7 @@
                 <li>
                     <a href="#"><i class="fa fa-magic"></i> <span class="nav-label">文章分类</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/type">学无止境</a></li>
+                        <li><a class="J_menuItem" name="iframe0" width="100%" height="100%" href="/admin/category">分类详情</a></li>
                     </ul>
                 </li>
                 {{--<li>--}}
@@ -79,7 +79,6 @@
                         <li><a class="J_menuItem" href="/admin/banner">首页轮播图</a></li>
                         <li><a class="J_menuItem" href="/admin/rmend">首页推荐</a></li>
                         <li><a class="J_menuItem" href="/admin/lable">链接标签</a></li>
-                        <li><a class="J_menuItem" href="/admin/amity_link">友情链接</a></li>
                     </ul>
                 </li>
                 <li>
@@ -88,8 +87,6 @@
                         <li><a class="J_menuItem" href="/admin/config">配置项</a></li>
                     </ul>
                 </li>
-
-
             </ul>
         </div>
     </nav>
@@ -99,9 +96,7 @@
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-
                 <ul class="nav navbar-top-links navbar-right">
-
                     <li class="dropdown hidden-xs">
                         <a class="right-sidebar-toggle" aria-expanded="false">
                             <i class="fa fa-tasks"></i> 主题
@@ -223,7 +218,6 @@
                                 </div>
                             </a>
                         </div>
-
                     </div>
                 </div>
 

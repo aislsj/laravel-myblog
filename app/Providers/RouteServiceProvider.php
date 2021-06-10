@@ -14,22 +14,16 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers\Home';
-
-    protected $adminNamespace = 'App\Http\Controllers\Admin';
-
-
-
-    public const HOME = '/';
-
-    public const ADMIN_HOME = 'admin/';
+    protected $namespace = 'App\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.
      *
      * @return void
      */
-    public function boot(){
+    public function boot()
+    {
+        //
 
         parent::boot();
     }
@@ -39,13 +33,13 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function map(){
+    public function map()
+    {
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
 
-        $this->mapAdminRoutes();
-
+        //
     }
 
     /**
@@ -75,13 +69,5 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
-    }
-
-
-    protected function mapAdminRoutes(){
-        Route::prefix('/admin')
-//            ->middleware('admin')
-            ->namespace($this->adminNamespace)
-            ->group(base_path('routes/admin.php'));
     }
 }

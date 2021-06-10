@@ -11,7 +11,14 @@
         <h2 class="hometitle">推荐文章与分享</h2>
         <ul class="sidenews">
             @foreach($re_article as $value)
-                <li> @if($value->article_img_status == 1 )<i><img src=" {{$value->article_img_path}}"></i> @endif<p> <a href="/list/info/{{$value->id}}">{{$value->article_name}}</a></p><span>{{$value->article_addtime}}</span> </li>
+                <li> @if($value['article_img_status'] == 1 )
+                        @foreach($value['articleImg'] as $img)
+                        <i><img src=" {{$img['article_img_path']}}"></i>
+                        @endforeach
+                    @endif
+                    <p><a href="/list/info/{{$value['id']}}">{{$value['article_name']}}</a></p>
+                    <span>{{$value['created_at']}}</span>
+                </li>
             @endforeach
         </ul>
     </div>
@@ -20,7 +27,14 @@
 
         <ul class="sidenews">
             @foreach($click_article as $value)
-                <li> @if($value->article_img_status == 1 )<i><img src=" {{$value->article_img_path}}"></i> @endif<p> <a href="/list/info/{{$value->id}}">{{$value->article_name}}</a></p><span>{{$value->article_addtime}}</span> </li>
+                <li> @if($value['article_img_status'] == 1 )
+                        @foreach($value['articleImg'] as $img)
+                            <i><img src=" {{$img['article_img_path']}}"></i>
+                        @endforeach
+                    @endif
+                    <p><a href="/list/info/{{$value['id']}}">{{$value['article_name']}}</a></p>
+                    <span>{{$value['created_at']}}</span>
+                </li>
             @endforeach
         </ul>
     </div>
@@ -28,7 +42,7 @@
         <h2 class="hometitle">标签云</h2>
         <ul>
             @foreach($lable as $value)
-                <a href="{{$value->link}}">{{$value->name}}</a>
+                <a href="{{$value['link']}}">{{$value['name']}}</a>
             @endforeach
         </ul>
     </div>
@@ -36,7 +50,7 @@
         <h2 class="hometitle">友情链接</h2>
         <ul>
             @foreach($amity_link as $value)
-            <li><a href="{{$value->link}}" target="_blank">{{$value->title}}</a></li>
+            <li><a href="{{$value['link']}}" target="_blank">{{$value['name']}}</a></li>
             @endforeach
         </ul>
     </div>
@@ -53,4 +67,4 @@
 
 </div>
 
-</div>
+

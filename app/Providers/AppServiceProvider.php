@@ -2,20 +2,11 @@
 
 namespace App\Providers;
 
+use App\Http\ViewComposers\HomePublicComposer;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
     /**
      * Register any application services.
      *
@@ -24,5 +15,20 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        view()->composer(
+            ['home.public.header'], HomePublicComposer::class
+        );
+        view()->composer(
+            ['home.public.index_left'], HomePublicComposer::class
+        );
     }
 }

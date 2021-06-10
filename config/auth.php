@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Admin;
+use App\Models\Customer;
+
 return [
 
     /*
@@ -44,10 +47,16 @@ return [
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
+            'hash' => false,
         ],
+
         'admin' => [
             'driver' => 'session',
             'provider' => 'admin',
+        ],
+        'phone' => [
+            'driver' => 'session',
+            'provider' => 'phone',
         ],
     ],
 
@@ -69,14 +78,19 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\User::class,
-        ],
         'admin' => [
             'driver' => 'eloquent',
-            'model' => \App\model\admin::class,
+            'model' => Admin::class,
         ],
+        'customer' => [
+            'driver' => 'eloquent',
+            'model' => Customer::class
+        ],
+        'phone' => [
+            'driver' => 'eloquent',
+            'model' => Customer::class
+        ],
+
     ],
 
     /*
@@ -95,13 +109,18 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
+        'admin' => [
+            'provider' => 'admin',
             'table' => 'password_resets',
             'expire' => 60,
         ],
-        'admin' => [
-            'provider' => 'admin',
+        'customer' => [
+            'provider' => 'customer',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'phone' => [
+            'provider' => 'customer',
             'table' => 'password_resets',
             'expire' => 60,
         ],

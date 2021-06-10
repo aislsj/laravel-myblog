@@ -1,151 +1,108 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lenovo
- * Date: 2018/2/5
- * Time: 19:13
- */
+
 namespace App\Http\Controllers\Admin;
-//use Validator;//验证
 use App\Http\Controllers\Controller;
+use App\Services\AdminService;
+use App\Services\ArticleService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 
 class AdminController extends Controller{
-   /**
-     * Display a listing of the resource.
-     *显示列表
-     * @return \Illuminate\Http\Response
-     */
-    public function index(){
-        $tot=\DB::table('admin')->count();
-        $admin = \DB::table('admin')->paginate(5);
-        return view("admin.admin.index")->with('admin',$admin)->with('tot',$tot);
+
+    public $request;
+    public $AdminService;
+
+    public function __construct(Request $request, AdminService $AdminService){
+        $this->request = $request;
+        $this->AdminService = $AdminService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *创建资源
-     * @return \Illuminate\Http\Response
-     */
+
+
+    public function index(){
+        $data = AdminService::getAdminList(5);
+        return view("admin.admin.index")->with('data',$data['data']);
+    }
+
+
     public function create(){
         return view("admin.admin.create");
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *数据保存
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $arr = $request->except('_token','file');
-        //表单验证规则
-        $rules=[
-            'name'=>'required|unique:admin|between:2,12',//存在\唯一性\6-12位
-            'pass'=>'required|same:check_pass|between:6,12',//存在\是否重复\6-12位
-            'identity'=>'required'
-        ];
-        //表单提示信息
-        $messages=[
-            'name.required'=>'请输入用户名',
-            'name.unique'=>'用户名已存在',
-            'pass.required'=>'请输入密码',
-            'pass.same'=>'两次密码输入不一致',
-            'pass.between'=>'密码长度为6-12位',
-            'name.between'=>'用户名长度为2-12位',
-            'identity.required'=>'身份不能为空'
-        ];
-        $validator = \Validator::make($arr,$rules,$messages);//数据 验证规则 提示信息
-        if($validator->passes()){
-            unset($arr['check_pass']);
-            $arr['add_time']=date("Y-m-d H:i:s");
-            $arr['pass']= \Crypt::encrypt($arr['pass']);
-            if(\DB::table('admin')->insert($arr)){
-                return redirect('/admin/admin');
-            }else{
-                return back();
-            }
+
+    public function store(){
+        $this->validate($this->request, [
+////            'nickname'  => ['required', Rule::unique('admin')->where(function ($query) {
+////                $query->whereNull('deleted_at');
+////            }),
+////            ],
+            'nickname'  => ['required', Rule::unique('admin')],
+            'username'  => ['required', Rule::unique('admin')],
+            'password_confirmation'=>['required',"same:password"],
+            'password'  => 'required|confirmed|min:6',
+            'status'    => 'required|boolean',
+            'nickname.required'=>"昵称不能为空",
+            'nickname.unique'=>"昵称已存在",
+            'username.required'=>"用户名不能为空",
+            'username.unique'=>"此用户名已存在",
+            'password_confirmation.required'=>"确认密码不能为空",
+            'password_confirmation.same'=>'密码与确认密码不匹配',
+        ]);
+        $data       = $this->request->all();
+        $req_result = $this->AdminService->createAdmin($data);
+        if($req_result['success']){
+            return redirect('/admin/admin');
         }else{
-            return back()->withErrors($validator);
+            return back()->withErrors([$req_result['msg']])->withInput();
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *根据id显示表单编辑
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $data = \DB::table('admin')->find($id);
-        $data->pass = \Crypt::decrypt($data->pass);
-        return view("admin.admin.edit")->with("data",$data);
+
+    public function edit($id){
+        $req_result = $this->AdminService->getAdmin($id);
+        return view("admin.admin.edit")->with('data',$req_result['data']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *edit提交到这里来修改
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function Update(Request  $request){
-        $arr=$_POST;
-        //表单验证规则
-        $rules=[
-            'pass'=>'required|same:check_pass|between:6,12'//存在\是否重复\6-12位
-        ];
-        //表单提示信息
-        $messages=[
-            'pass.required'=>'请输入密码',
-            'pass.same'=>'两次密码输入不一致',
-            'pass.between'=>'密码长度为6-12位',
-        ];
-        $validator = \Validator::make($arr,$rules,$messages);//数据 验证规则 提示信息
-        if($validator->passes()){
-            unset($arr['_token']);
-            unset($arr['_method']);
-            unset($arr['check_pass']);
-            $arr['pass']= \Crypt::encrypt($arr['pass']);
 
-            $re =\ DB::table('admin')->where('id', $arr['id'])->update($arr);
-            if($re){
-                return redirect('/admin/admin');
-            }else{
-                return back();
-            }
+    public function Update(){
+
+        $this->validate($this->request, [
+            'password_confirmation'=>["same:password"],
+            'password_confirmation.same'=>'密码与确认密码不匹配',
+        ]);
+        $data       = $this->request->all();
+        $req_result = $this->AdminService->editAdmin($data);
+        if($req_result['success']){
+            return redirect('/admin/admin');
         }else{
-            return back()->withErrors($validator);
+            return back()->withErrors([$req_result['msg']])->withInput();
         }
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *对应delete
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-        public function destroy($id){
-        //删除数据
-        if(\DB::table("admin")->delete($id)){
-            return 1;
-        }else{
-            return 0;
+
+    public function destroy($id){
+        $req_result = $this->AdminService->deleteAdmin($id);
+        if ($req_result['success'] == true) {
+            $result['code'] = 1000;
+            $result['msg']  = '操作成功';
+        } else {
+            $result['code'] = 2000;
+            $result['msg']  = isset($req_result['msg']) ? $req_result['msg'] : '操作失败';
         }
+        return $result;
     }
-        //修改管理员状态
-        public function ajaxStatus(){
-        $arr=$_POST;
-        unset($arr['_token']);
-        if(\DB::update("update admin set admin_status = $arr[status] where id = $arr[id]")){
-            return 1;
-        }else{
-            return 0;
-        }
-    }
+//    //修改管理员状态
+//    public function ajaxStatus(){
+//    $arr=$_POST;
+//    unset($arr['_token']);
+//    if(\DB::update("update admin set admin_status = $arr[status] where id = $arr[id]")){
+//        return 1;
+//    }else{
+//        return 0;
+//    }
+//    }
 }
 
 
