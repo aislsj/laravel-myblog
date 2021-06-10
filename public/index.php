@@ -1,7 +1,7 @@
 <?php
 
 
-var_dump('执行网站成功');exit
+var_dump('执行网站成功');exit;
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
